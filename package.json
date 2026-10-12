@@ -1,0 +1,121 @@
+{
+  "name": "compact-wsl",
+  "displayName": "WSL Diet",
+  "description": "WSL2 の仮想ディスク (ext4.vhdx) と swap.vhdx のサイズをステータスバーに表示し、VS Code から圧縮・削除する",
+  "version": "0.1.0",
+  "publisher": "krkr-dev",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/krkr-dev/compact-wsl.git"
+  },
+  "bugs": {
+    "url": "https://github.com/krkr-dev/compact-wsl/issues"
+  },
+  "homepage": "https://github.com/krkr-dev/compact-wsl#readme",
+  "icon": "images/icon.png",
+  "galleryBanner": {
+    "color": "#0E7490",
+    "theme": "dark"
+  },
+  "keywords": [
+    "wsl",
+    "wsl2",
+    "vhdx",
+    "disk",
+    "compact",
+    "swap",
+    "diskpart"
+  ],
+  "engines": {
+    "vscode": "^1.100.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "extensionKind": [
+    "ui"
+  ],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "compactWsl.showStatus",
+        "title": "Show Status",
+        "category": "WSL Diet"
+      },
+      {
+        "command": "compactWsl.refresh",
+        "title": "Refresh Size",
+        "category": "WSL Diet"
+      },
+      {
+        "command": "compactWsl.compact",
+        "title": "Compact",
+        "category": "WSL Diet"
+      },
+      {
+        "command": "compactWsl.deleteSwap",
+        "title": "Delete Swap Only",
+        "category": "WSL Diet"
+      },
+      {
+        "command": "compactWsl.menu",
+        "title": "Menu",
+        "category": "WSL Diet"
+      }
+    ],
+    "menus": {
+      "commandPalette": [
+        {
+          "command": "compactWsl.compact",
+          "when": "remoteName != wsl"
+        },
+        {
+          "command": "compactWsl.deleteSwap",
+          "when": "remoteName != wsl"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "WSL Diet",
+      "properties": {
+        "compactWsl.distro": {
+          "type": "string",
+          "default": "",
+          "description": "対象のディストロ名。空なら既定のディストロ。"
+        },
+        "compactWsl.warnThresholdGB": {
+          "type": "number",
+          "default": 50,
+          "minimum": 1,
+          "description": "vhdx がこのサイズ (GB) を超えたらステータスバーを警告色にする。"
+        },
+        "compactWsl.pollIntervalMinutes": {
+          "type": "number",
+          "default": 5,
+          "minimum": 1,
+          "description": "vhdx のサイズを測る間隔 (分)。"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "build": "node esbuild.js",
+    "watch": "node esbuild.js --watch",
+    "typecheck": "tsc --noEmit",
+    "test": "tsc -p tsconfig.test.json && node --test \"out/test/**/*.test.js\"",
+    "package": "npm run typecheck && node esbuild.js --production && vsce package",
+    "vscode:prepublish": "node esbuild.js --production"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "@types/vscode": "~1.100.0",
+    "@vscode/vsce": "^3.0.0",
+    "esbuild": "^0.25.0",
+    "typescript": "^5.8.0"
+  }
+}

@@ -1,0 +1,4 @@
+{
+  "extends": "./tsconfig.json",
+  "include": ["test", "src/format.ts", "src/win/decode.ts", "src/win/distro.ts", "src/win/swap.ts", "src/win/diskpart.ts", "src/win/wslClients.ts"]
+}
